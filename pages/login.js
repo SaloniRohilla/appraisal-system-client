@@ -1,15 +1,15 @@
-import { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useState, useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { login } = useContext(AuthContext);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { login } = useContext(AuthContext)
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    await login(email, password);
-  };
+    e.preventDefault()
+    await login(email, password)
+  }
 
   return (
     <div>
@@ -32,5 +32,5 @@ export default function Login() {
         <button type="submit">Login</button>
       </form>
     </div>
-  );
+  )
 }
