@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
+// Create the AuthContext
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -9,6 +10,10 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const router = useRouter();
 
+  // Set your backend URL
+  const backendUrl = 'http://localhost:5000'; // Update to your backend URL
+
+  // Load stored token and user on component mount
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -20,9 +25,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Login function
   const login = async (email, password) => {
     try {
-      const res = await axios.post('/api/auth/login', { email, password });
+      const res = await axios.post(`${backendUrl}/api/auth/login`, { email, password });
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       
@@ -37,9 +43,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Register function
   const register = async (userData) => {
     try {
-      const res = await axios.post('/api/auth/register', userData);
+      const res = await axios.post(`${backendUrl}/api/auth/register`, userData);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       
@@ -54,12 +61,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Logout function
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setToken(null);
+    setUser(null);
+    delete axios.defaults.headers.common['x-auth-token'];
+    router.push('/login');
+  };
+
+  // AuthContext value
   return (
     <AuthContext.Provider value={{ 
       user, 
       token, 
       login, 
       register,
+      logout,
       isAuthenticated: !!token 
     }}>
       {children}
