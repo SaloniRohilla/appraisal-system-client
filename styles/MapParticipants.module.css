@@ -1,0 +1,52 @@
+/* styles/MapParticipants.module.css */
+
+.container {
+    padding: 20px;
+    background-color: #f4f4f4;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .selectUser,
+  .selectSupervisor {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .peerGroup,
+  .juniorGroup {
+    margin-top: 20px;
+  }
+  
+  .checkboxLabel {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #2c3e50;
+  }
+  
+  .checkboxInput {
+    margin-right: 10px;
+  }
+  
+  .submitButton {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submitButton:hover {
+    background-color: #2980b9;
+  }
+  

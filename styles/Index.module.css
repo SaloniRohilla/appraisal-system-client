@@ -1,0 +1,27 @@
+/* styles/Index.module.css */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    text-align: center;
+    background-color: #f4f4f4; /* Light grey background */
+    padding: 0; /* Remove extra padding */
+    margin: 0; /* Remove any default margin */
+  }
+  
+  .welcomeMessage {
+    font-size: 24px;
+    color: #2c3e50;
+  }
+  
+  .roleInfo {
+    font-size: 18px;
+    color: #7f8c8d;
+  }
+  
+  .loginPrompt {
+    font-size: 20px;
+    color: #e74c3c;
+  }
+  

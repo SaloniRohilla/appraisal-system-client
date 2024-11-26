@@ -1,78 +1,82 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import styles from '../../styles/FillAppraisal.module.css' // Ensure correct path
 
 export default function FillAppraisal() {
-  const [questions, setQuestions] = useState([]);
-  const [employees, setEmployees] = useState([]);
+  const [questions, setQuestions] = useState([])
+  const [employees, setEmployees] = useState([])
   const [appraisalData, setAppraisalData] = useState({
     employee: '',
-    questions: []
-  });
+    questions: [],
+  })
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [questionsRes, employeesRes] = await Promise.all([
           axios.get('/api/questions'),
-          axios.get('/api/users')
-        ]);
+          axios.get('/api/users'),
+        ])
 
-        setQuestions(questionsRes.data);
-        setEmployees(employeesRes.data);
+        setQuestions(questionsRes.data)
+        setEmployees(employeesRes.data)
 
         // Initialize questions with default ratings
-        const initialQuestions = questionsRes.data.map(q => ({
+        const initialQuestions = questionsRes.data.map((q) => ({
           question: q._id,
           rating: 3,
-          comments: ''
-        }));
+          comments: '',
+        }))
 
-        setAppraisalData(prev => ({
+        setAppraisalData((prev) => ({
           ...prev,
-          questions: initialQuestions
-        }));
+          questions: initialQuestions,
+        }))
       } catch (error) {
-        console.error('Failed to fetch data', error);
+        console.error('Failed to fetch data', error)
       }
-    };
+    }
 
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      await axios.post('/api/appraisals', appraisalData);
-      alert('Appraisal submitted successfully');
+      await axios.post('/api/appraisals', appraisalData)
+      alert('Appraisal submitted successfully')
     } catch (error) {
-      console.error('Failed to submit appraisal', error);
+      console.error('Failed to submit appraisal', error)
     }
-  };
+  }
 
   const updateQuestion = (index, field, value) => {
-    const updatedQuestions = [...appraisalData.questions];
-    updatedQuestions[index][field] = value;
+    const updatedQuestions = [...appraisalData.questions]
+    updatedQuestions[index][field] = value
 
-    setAppraisalData(prev => ({
+    setAppraisalData((prev) => ({
       ...prev,
-      questions: updatedQuestions
-    }));
-  };
+      questions: updatedQuestions,
+    }))
+  }
 
   return (
-    <div>
+    <div className={styles.container}>
       <h2>Fill Appraisal</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <select
           value={appraisalData.employee}
-          onChange={(e) => setAppraisalData(prev => ({
-            ...prev,
-            employee: e.target.value
-          }))}
+          onChange={(e) =>
+            setAppraisalData((prev) => ({
+              ...prev,
+              employee: e.target.value,
+            }))
+          }
           required
+          className={styles.selectEmployee}
         >
           <option value="">Select Employee</option>
-          {employees.map(emp => (
+          {employees.map((emp) => (
             <option key={emp._id} value={emp._id}>
               {emp.name}
             </option>
@@ -80,15 +84,18 @@ export default function FillAppraisal() {
         </select>
 
         {appraisalData.questions.map((q, index) => {
-          const question = questions.find(qu => qu._id === q.question);
+          const question = questions.find((qu) => qu._id === q.question)
           return (
-            <div key={q.question}>
-              <p>{question?.text}</p>
+            <div key={q.question} className={styles.questionContainer}>
+              <p className={styles.questionText}>{question?.text}</p>
               <select
                 value={q.rating}
-                onChange={(e) => updateQuestion(index, 'rating', Number(e.target.value))}
+                onChange={(e) =>
+                  updateQuestion(index, 'rating', Number(e.target.value))
+                }
+                className={styles.ratingSelect}
               >
-                {[1,2,3,4,5].map(rating => (
+                {[1, 2, 3, 4, 5].map((rating) => (
                   <option key={rating} value={rating}>
                     {rating}
                   </option>
@@ -96,15 +103,20 @@ export default function FillAppraisal() {
               </select>
               <textarea
                 value={q.comments}
-                onChange={(e) => updateQuestion(index, 'comments', e.target.value)}
+                onChange={(e) =>
+                  updateQuestion(index, 'comments', e.target.value)
+                }
                 placeholder="Comments"
+                className={styles.commentBox}
               />
             </div>
-          );
+          )
         })}
 
-        <button type="submit">Submit Appraisal</button>
+        <button type="submit" className={styles.submitButton}>
+          Submit Appraisal
+        </button>
       </form>
     </div>
-  );
+  )
 }

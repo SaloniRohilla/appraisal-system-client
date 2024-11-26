@@ -1,0 +1,49 @@
+/* styles/ViewAppraisal.module.css */
+
+.container {
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .heading {
+    font-size: 28px;
+    text-align: center;
+    color: #2c3e50;
+  }
+  
+  .appraisalList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .appraisalItem {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .appraisalTitle {
+    font-size: 20px;
+    color: #3498db;
+  }
+  
+  .appraisalStatus {
+    font-size: 16px;
+    color: #7f8c8d;
+    margin-top: 5px;
+  }
+  
+  .appraisalStatus.completed {
+    color: #2ecc71;
+  }
+  
+  .appraisalStatus.pending {
+    color: #e67e22;
+  }
+  
+  .appraisalStatus.failed {
+    color: #e74c3c;
+  }
+  
