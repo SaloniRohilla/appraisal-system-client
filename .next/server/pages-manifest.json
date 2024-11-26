@@ -1,7 +1,14 @@
 {
-  "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/_app": "pages/_app.js",
+  "/appraisal/view-appraisal": "pages/appraisal/view-appraisal.js",
+  "/appraisal/fill-appraisal": "pages/appraisal/fill-appraisal.js",
   "/admin/create-questions": "pages/admin/create-questions.js",
+  "/api/questions": "pages/api/questions.js",
+  "/api/users": "pages/api/users.js",
+  "/api/appraisals": "pages/api/appraisals.js",
+  "/admin/map-participants": "pages/admin/map-participants.js",
+  "/login": "pages/login.js",
   "/": "pages/index.js"
 }

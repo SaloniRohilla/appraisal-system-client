@@ -1,23 +1,27 @@
-import mongoose from 'mongoose';
-import Question from '../../server/models/Question'; // Import the model from the server side
-
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
-      // Logic to fetch questions
-      const questions = await Question.find({ isActive: true });
-      res.status(200).json(questions);
+      // Fetch the question data from your data source (e.g., database, API, etc.)
+      const questionData = await fetchQuestionData();
+
+      // Send the question data as the response
+      res.status(200).json(questionData);
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching questions', error: error.message });
+      console.error('Error fetching questions:', error);
+      res.status(500).json({ error: 'Failed to fetch questions' });
     }
-  } else if (req.method === 'POST') {
-    try {
-      const { text, category } = req.body;
-      const newQuestion = new Question({ text, category });
-      await newQuestion.save();
-      res.status(201).json(newQuestion);
-    } catch (error) {
-      res.status(500).json({ message: 'Error creating question', error: error.message });
-    }
+  } else {
+    // Handle other HTTP methods (e.g., POST, PUT, DELETE) for the questions endpoint
+    res.status(405).json({ error: 'Method not allowed' });
   }
+}
+
+async function fetchQuestionData() {
+  // Implement the logic to fetch question data from your data source
+  // This can be a simple in-memory data structure or a more complex database/API integration
+  return [
+    { id: 1, text: 'What is your role in the company?' },
+    { id: 2, text: 'How long have you been with the company?' },
+    // Add more question data as needed
+  ];
 }
