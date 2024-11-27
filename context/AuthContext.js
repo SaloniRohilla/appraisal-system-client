@@ -2,44 +2,50 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-// Create the AuthContext
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // to manage loading state
   const router = useRouter();
 
-  // Set your backend URL
-  const backendUrl = 'http://localhost:5000'; // Update to your backend URL
+  const backendUrl = 'http://localhost:5000'; // backend URL
 
-  // Load stored token and user on component mount
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     const storedUser = JSON.parse(localStorage.getItem('user'));
-    
+
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(storedUser);
       axios.defaults.headers.common['x-auth-token'] = storedToken;
     }
+    setLoading(false); // finish loading when useEffect is done
   }, []);
 
   // Login function
   const login = async (email, password) => {
     try {
       const res = await axios.post(`${backendUrl}/api/auth/login`, { email, password });
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      const { token, user } = res.data;
+
+      // Store in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Set in context state
+      setToken(token);
+      setUser(user);
       
-      setToken(res.data.token);
-      setUser(res.data.user);
-      
-      axios.defaults.headers.common['x-auth-token'] = res.data.token;
+      // Set axios header
+      axios.defaults.headers.common['x-auth-token'] = token;
+
+      // Redirect to home
       router.push('/');
     } catch (error) {
       console.error('Login failed', error);
-      throw error;
+      throw new Error('Login failed');
     }
   };
 
@@ -47,17 +53,24 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const res = await axios.post(`${backendUrl}/api/auth/register`, userData);
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      const { token, user } = res.data;
+
+      // Store in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Set in context state
+      setToken(token);
+      setUser(user);
       
-      setToken(res.data.token);
-      setUser(res.data.user);
-      
-      axios.defaults.headers.common['x-auth-token'] = res.data.token;
+      // Set axios header
+      axios.defaults.headers.common['x-auth-token'] = token;
+
+      // Redirect to home
       router.push('/');
     } catch (error) {
       console.error('Registration failed', error);
-      throw error;
+      throw new Error('Registration failed');
     }
   };
 
@@ -79,9 +92,10 @@ export const AuthProvider = ({ children }) => {
       login, 
       register,
       logout,
-      isAuthenticated: !!token 
+      isAuthenticated: !!token,
+      loading 
     }}>
-      {children}
+      {loading ? <div>Loading...</div> : children} {/* show loading state while fetching data */}
     </AuthContext.Provider>
   );
 };

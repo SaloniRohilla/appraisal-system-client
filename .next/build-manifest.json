@@ -43,20 +43,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/appraisal/fill-appraisal.js"
     ],
-    "/appraisal/view-appraisal": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/appraisal/view-appraisal.js"
-    ],
     "/login": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/login.js"
-    ],
-    "/register": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/register.js"
     ]
   },
   "ampFirstPages": []

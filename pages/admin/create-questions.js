@@ -11,7 +11,7 @@ export default function CreateQuestions() {
 
   const fetchQuestions = async () => {
     try {
-      const res = await axios.get('/api/questions')
+      const res = await axios.get('http://localhost:5000/api/questions')
       setQuestions(res.data)
     } catch (error) {
       console.error('Failed to fetch questions', error)
@@ -25,13 +25,18 @@ export default function CreateQuestions() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.post('/api/questions', newQuestion)
+      const token = localStorage.getItem('token') // Get the token from localStorage
+      const headers = {
+        Authorization: `Bearer ${token}`, // Include token in headers
+      }
+      await axios.post('http://localhost:5000/api/questions', newQuestion, { headers })
       fetchQuestions()
       setNewQuestion({ text: '', category: 'PERFORMANCE' })
     } catch (error) {
       console.error('Failed to create question', error)
     }
   }
+  
 
   return (
     <div>

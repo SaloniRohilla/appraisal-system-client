@@ -10,7 +10,10 @@ export default function MapParticipants() {
     peerIds: [],
     juniorIds: [],
   })
+  const [loading, setLoading] = useState(false) // State to track loading status
+  const [error, setError] = useState('') // State to track any errors
 
+  // Fetch users from API
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -18,24 +21,49 @@ export default function MapParticipants() {
         setUsers(res.data)
       } catch (error) {
         console.error('Failed to fetch users', error)
+        setError('Failed to fetch users')
       }
     }
     fetchUsers()
   }, [])
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true) // Start loading
+    setError('') // Reset error state
     try {
       await axios.post('/api/users/map-participants', mapping)
       alert('Participants mapped successfully')
     } catch (error) {
       console.error('Failed to map participants', error)
+      setError('Failed to map participants') // Set error message
+    } finally {
+      setLoading(false) // End loading
     }
+  }
+
+  // Handle checkbox change
+  const handleCheckboxChange = (userId, group) => {
+    setMapping((prevMapping) => {
+      const updatedGroup = [...prevMapping[group]]
+      const index = updatedGroup.indexOf(userId)
+      if (index > -1) {
+        updatedGroup.splice(index, 1) // Remove userId
+      } else {
+        updatedGroup.push(userId) // Add userId
+      }
+      return {
+        ...prevMapping,
+        [group]: updatedGroup,
+      }
+    })
   }
 
   return (
     <div className={styles.container}>
       <h2>Map Participants</h2>
+      {error && <div className={styles.error}>{error}</div>} {/* Display error message */}
       <form onSubmit={handleSubmit} className={styles.form}>
         <select
           value={mapping.userId}
@@ -53,9 +81,7 @@ export default function MapParticipants() {
 
         <select
           value={mapping.supervisorId}
-          onChange={(e) =>
-            setMapping({ ...mapping, supervisorId: e.target.value })
-          }
+          onChange={(e) => setMapping({ ...mapping, supervisorId: e.target.value })}
           className={styles.selectSupervisor}
         >
           <option value="">Select Supervisor</option>
@@ -73,13 +99,9 @@ export default function MapParticipants() {
               <input
                 type="checkbox"
                 checked={mapping.peerIds.includes(user._id)}
-                onChange={() => {
-                  const newPeerIds = mapping.peerIds.includes(user._id)
-                    ? mapping.peerIds.filter((id) => id !== user._id)
-                    : [...mapping.peerIds, user._id]
-                  setMapping({ ...mapping, peerIds: newPeerIds })
-                }}
+                onChange={() => handleCheckboxChange(user._id, 'peerIds')}
                 className={styles.checkboxInput}
+                aria-label={`Map ${user.name} as peer`}
               />
               {user.name}
             </label>
@@ -93,21 +115,17 @@ export default function MapParticipants() {
               <input
                 type="checkbox"
                 checked={mapping.juniorIds.includes(user._id)}
-                onChange={() => {
-                  const newJuniorIds = mapping.juniorIds.includes(user._id)
-                    ? mapping.juniorIds.filter((id) => id !== user._id)
-                    : [...mapping.juniorIds, user._id]
-                  setMapping({ ...mapping, juniorIds: newJuniorIds })
-                }}
+                onChange={() => handleCheckboxChange(user._id, 'juniorIds')}
                 className={styles.checkboxInput}
+                aria-label={`Map ${user.name} as junior`}
               />
               {user.name}
             </label>
           ))}
         </div>
 
-        <button type="submit" className={styles.submitButton}>
-          Map Participants
+        <button type="submit" className={styles.submitButton} disabled={loading}>
+          {loading ? 'Mapping...' : 'Map Participants'}
         </button>
       </form>
     </div>

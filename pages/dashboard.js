@@ -1,9 +1,21 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 export default function Dashboard() {
-  const { user, isAuthenticated } = useContext(AuthContext);
+  const { user, isAuthenticated, loading } = useContext(AuthContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated && !loading) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, loading, router]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!isAuthenticated) {
     return (
