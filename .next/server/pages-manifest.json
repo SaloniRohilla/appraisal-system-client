@@ -2,11 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/login": "pages/login.js",
-  "/admin/create-questions": "pages/admin/create-questions.js",
   "/admin/map-participants": "pages/admin/map-participants.js",
   "/api/users": "pages/api/users.js",
-  "/appraisal/fill-appraisal": "pages/appraisal/fill-appraisal.js",
-  "/api/questions": "pages/api/questions.js"
+  "/admin/create-questions": "pages/admin/create-questions.js",
+  "/appraisal/view-appraisal": "pages/appraisal/view-appraisal.js",
+  "/appraisal/fill-appraisal": "pages/appraisal/fill-appraisal.js"
 }
